@@ -4,6 +4,10 @@ public class MastercardStockFactory implements AbstractFactory {
 	
 	private StockPriceStrategyAPI stockPriceStrategyAPI; // Add strategy field
 	
+	public MastercardStockFactory() {
+		
+	}
+	
     public MastercardStockFactory(StockPriceStrategyAPI stockPriceStrategyAPI) {
 		super();
 		this.stockPriceStrategyAPI = stockPriceStrategyAPI;
@@ -12,7 +16,7 @@ public class MastercardStockFactory implements AbstractFactory {
 	@Override
 	public StockAPI getObject() {
 		
-		return new FinanceTechStock("Mastercard Inc.", 560.00, "FinTech Sector Stock", stockPriceStrategyAPI);
+		return new FinanceTechStock("Mastercard Inc.", 560.00, "FinTech Sector Stock");
 	}
     
 

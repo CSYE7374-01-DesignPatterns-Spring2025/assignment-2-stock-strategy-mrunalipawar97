@@ -19,7 +19,7 @@ public class DisneyStockLazySingletonFactory implements AbstractFactory {
 
     @Override
     public StockAPI getObject() {
-        return new MediaStock("Disney Stock", 150.00, "Entertainment & Media Stock", stockPriceStrategyAPI);
+        return new MediaStock();
     }
 
 }

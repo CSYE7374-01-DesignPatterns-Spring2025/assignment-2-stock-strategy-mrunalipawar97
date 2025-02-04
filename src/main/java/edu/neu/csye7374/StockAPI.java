@@ -8,19 +8,20 @@ public abstract class StockAPI implements Tradable {
 	private String name;
 	private double price;
 	private String description;
+	double bid;
+	protected int bidCount = 0;
 	private StockPriceStrategyAPI stockPriceStrategyAPI;
 	protected List<Double> bidHistory = new ArrayList<>();
 
-	public StockAPI(String name, double price, String description, StockPriceStrategyAPI stockPriceStrategyAPI) {
+	public StockAPI(String name, double price, String description) {
 		super();
 		this.name = name;
 		this.price = price;
 		this.description = description;
-		this.stockPriceStrategyAPI = stockPriceStrategyAPI;
 	}
 
 	public void updatePrice() {
-		this.price = stockPriceStrategyAPI.computeNewStockPrice(this.price);
+		this.price = stockPriceStrategyAPI.computeNewStockPrice(this.price, bid);
 	}
 
 	public String getName() {
@@ -47,22 +48,28 @@ public abstract class StockAPI implements Tradable {
 		this.description = description;
 	}
 
-	public void setBid(String bid) {
+	public StockPriceStrategyAPI getStockPriceStrategyAPI() {
+		return stockPriceStrategyAPI;
+	}
+
+	public void setStockPriceStrategyAPI(StockPriceStrategyAPI stockPriceStrategyAPI) {
+		this.stockPriceStrategyAPI = stockPriceStrategyAPI;
+	}
+
+	public void setBid(double bid) {
 		// TODO Auto-generated method stub
-		try {
-			double bidValue = Double.parseDouble(bid);
-			bidHistory.add(bidValue);
-			price = bidValue; // Update price based on the latest bid
-		} catch (NumberFormatException e) {
-			System.out.println("Invalid bid format: " + bid);
-		}
+		if (stockPriceStrategyAPI == null) {
+            throw new IllegalStateException("Market strategy isnt set or avialble");
+        }
+        price = stockPriceStrategyAPI.computeNewStockPrice(price, bid);
 
 	}
 
 	@Override
 	public String toString() {
-		return "StockAPI [name=" + name + ", price=" + price + ", description=" + description
-				+ ", stockPriceStrategyAPI=" + stockPriceStrategyAPI + ", bidHistory=" + bidHistory + "]";
+		String strategyName = (stockPriceStrategyAPI != null) ? stockPriceStrategyAPI.getClass().getSimpleName() : "None";
+	    return "StockAPI [name=" + name + ", price=" + price + ", description=" + description
+	            + ", strategy=" + strategyName + "]";
 	}
 	
 }
